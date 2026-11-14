@@ -1,0 +1,10 @@
+params[alpha, n, maxit] <- [[0.1, 4.0, 10]]
+xtrain[id, c, v] <- [[0,0,1.0],[0,1,2.0],[1,0,2.0],[1,1,1.0],[2,0,3.0],[2,1,0.5],[3,0,0.5],[3,1,3.0]]
+ytrain[id, y] <- [[0,5.0],[1,4.0],[2,4.0],[3,6.5]]
+model0[c, p] <- [[0,0.0],[1,0.0]]
+
+model[t, c, p] := model0[c, p], t = 0
+predict[t, id, sum(y)] := model[t, c, p], xtrain[id, c, v], y = v * p
+gradient[t, c, sum(g)] := ytrain[id, y], predict[t, id, yp], xtrain[id, c, v], g = 2 * (yp - y) * v
+model[tn, c, p2] := model[t, c, p], gradient[t, c, g], params[alpha, n, maxit], t < maxit, tn = t + 1, p2 = p - alpha * g / n
+?[c, p] := model[10, c, p]
